@@ -223,6 +223,8 @@
                   [(first shapes) [] []]
                   (prepare-create-group objects page-id shapes "Group-1" true))
 
+                mask (get objects (first (:shapes group)))
+
                 rchanges (d/concat rchanges
                                    [{:type :mod-obj
                                      :page-id page-id
@@ -242,6 +244,15 @@
                                                   {:type :set
                                                    :attr :transform-inverse
                                                    :val (-> shapes first :transform-inverse)}]}
+                                    {:type :mod-obj
+                                     :page-id page-id
+                                     :id (:id mask)
+                                     :operations [{:type :set
+                                                   :attr :constraints-h
+                                                   :val :scale}
+                                                  {:type :set
+                                                   :attr :constraints-v
+                                                   :val :scale}]}
                                     {:type :reg-objects
                                      :page-id page-id
                                      :shapes [(:id group)]}])
@@ -253,6 +264,15 @@
                                 :operations [{:type :set
                                               :attr :masked-group?
                                               :val nil}]}
+                               {:type :mod-obj
+                                :page-id page-id
+                                :id (:id mask)
+                                :operations [{:type :set
+                                              :attr :constraints-h
+                                              :val (:constraints-h mask)}
+                                             {:type :set
+                                              :attr :constraints-v
+                                              :val (:constraints-v mask)}]}
                                {:type :reg-objects
                                 :page-id page-id
                                 :shapes [(:id group)]})]
